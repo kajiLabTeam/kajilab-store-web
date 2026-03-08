@@ -1,5 +1,5 @@
 "use client"
-import { Button, SegmentedControl } from '@mantine/core'
+import { Button, Image, SegmentedControl } from '@mantine/core'
 import React, { useEffect, useRef, useState } from 'react'
 import * as QRCode from "qrcode";
 import JsBarcode from "jsbarcode";
@@ -66,7 +66,7 @@ const Base = () => {
   }
   
   return (
-    <div className='max-w-[600px] mx-auto'>
+    <div className='max-w-[600px] mx-auto mb-20'>
       <div className='text-2xl font-black text-center my-2'>梶研Payモバイル登録</div>
       <div className='text-1xl font-bold text-center text-white mx-auto px-10 bg-kirby-pink w-fit rounded-full'>
         Kajilab Pay Mobile
@@ -115,6 +115,25 @@ const Base = () => {
           ) }
         </div>
       )}
+      <div className='bg-white shadow rounded-md px-5 py-3'>
+        <details>
+          <summary className='text-xl font-bold'>梶研Payモバイルの使い方</summary>
+          <div className='md:text-base text-xs font-medium'>
+            <p>＜チャージ方法＞</p>
+            <p>レジ端末の「梶研Pay関連」を押し，画面に従い「精算時提示用バーコード」をバーコードリーダーで読み取りお金を入れる</p>
+            <Image src="/images/kajilabpaycharge.webp"/>
+            {/* <div className='w- aspect-29/20 relative mx-auto'>
+              <Image src="/images/kajilabpaycharge.webp" fill alt={"adsfe"} />
+            </div> */}
+          
+            <p className='mt-5'>＜支払い方法＞</p>
+            <p>「梶研Payで支払」から画面に従い「精算時提示用バーコード」をバーコードリーダーで読み取る</p>
+            <Image src="/images/kajilabpaypay.webp"/>
+
+          </div>
+        </details>
+        
+      </div>
     </div>
   )
 }
