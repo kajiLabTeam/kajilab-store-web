@@ -9,6 +9,7 @@ export const useGetAPI = <T>(url: string) => {
     const res = await fetch(url, {
       headers: {
         // APIキーとか
+        "X-API-Key": process.env.NEXT_PUBLIC_KAJILABSTORE_API_KEY!,
       },
     });
     if (!res.ok) throw new Error('API failed');

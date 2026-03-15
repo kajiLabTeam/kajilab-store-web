@@ -29,6 +29,7 @@ function EditAssetBase() {
         {
           headers: {
             'Content-Type': 'application/json',
+            'X-API-KEY': `${process.env.NEXT_PUBLIC_KAJILABSTORE_API_KEY}`,
           },
         }
       )

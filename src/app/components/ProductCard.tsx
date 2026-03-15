@@ -36,10 +36,10 @@ const ProductCard = ({product}: ProductCardListProps) => {
       </Group>
 
       <div>
-        <text>
+        <p>
           値段：{product.price}<br/>
           在庫数：{product.stock}
-        </text>
+        </p>
       </div>
     </Card>
   )
