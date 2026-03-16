@@ -29,6 +29,7 @@ export const getFromLocalStorage = (key: string): string => {
   return ""
 }
 
+// 画像を縮小しjpgに変換する
 export const resizeImageToHeight = (file: FileWithPath, targetHeight: number): Promise<File> => {
   return new Promise((resolve, reject) => {
     const img = new Image();

@@ -7,7 +7,7 @@ type ProductCardListProps = {
 }
 
 const ProductCard = ({product}: ProductCardListProps) => {
-  const imgPath = `https://firebasestorage.googleapis.com/v0/b/kajilab-store.appspot.com/o/images%2F${product.barcode}.jpg?alt=media&token=c46357bc-f29c-4d5f-8048-33c1d4a65083`
+  const imgPath = `${process.env.NEXT_PUBLIC_BASE_URL}/images/products/${product.barcode}.jpg`
   const pdSize = useMatches({
     base: 'xs',
     md: 'lg',

@@ -5,7 +5,6 @@ import { Product } from '@/types/response';
 import { Button, Card, FileButton, FileInput, Group, Image, MultiSelect, NumberInput, Text, TextInput } from '@mantine/core';
 import { Form, useForm } from '@mantine/form';
 import axios from 'axios';
-import { getDownloadURL, getStorage, ref, uploadBytes, uploadBytesResumable } from 'firebase/storage';
 import { useRouter } from 'next/navigation';
 import React, { ChangeEvent, FormEvent, useEffect, useState } from 'react'
 import { Dropzone, DropzoneProps, FileWithPath, IMAGE_MIME_TYPE } from '@mantine/dropzone';
@@ -24,11 +23,10 @@ const ProductEditor = ({barcode}: ProductEditorProps) => {
   const [isUploaded, setUploaded] = useState(false)
   const router = useRouter();
   const [uploadFile, setUploadFile] = useState<FileWithPath>()
-  const [isUpload, setIsUpload] = useState(false)
+  const [isUploading, setIsUploading] = useState(false)
   const {data: product, isLoading, error} = useGetAPI<Product>(
     `${process.env.NEXT_PUBLIC_BASE_URL}/api/v1/products/${barcode}`
   )
-  const [imgUrl] = useFirebaseStorageURL(product)
 
   const [formPrice, setFormPrice] = useState<string | number>('');
   const [formStock, setFormStock] = useState<string | number>('');
@@ -60,32 +58,26 @@ const ProductEditor = ({barcode}: ProductEditorProps) => {
     setLoading(false)
     window.location.reload()
   }
-  
 
-  const uploadFileToFirebase = async (file: FileWithPath) => {
-    if(file && product){
-      const resizedFile = await resizeImageToHeight(file, 300)
-      const storageRef = ref(storage, `images/${product.barcode}.jpg`)
-      const uploadImage = uploadBytesResumable(storageRef, resizedFile);
+  const uploadFileToServer = async (file: File) => {
+    setIsUploading(true)
+    console.log("どろっぷされたよ")
+    const resizedFile = await resizeImageToHeight(file, 300)
 
-      // アップロードの状態が変わったら発火
-      uploadImage.on(
-        "state_changed",
-        (snapshot) => {
-          setLoading(true)
-        },
-        (err) => {
-          console.log(err)
-        },
-        () => {
-          // 終了したら
-          setLoading(false)
-          setUploaded(true)
-          router.push("/admin/products")
-          router.refresh()
-        }
-      )
-    }
+    const formData = new FormData()
+    formData.append("file", resizedFile)
+
+    await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/v1/images/products/${barcode}.jpg`, {
+      method: "POST",
+      headers: {
+        "X-API-Key": process.env.NEXT_PUBLIC_API_KEY!,
+      },
+      body: formData,
+    })
+
+    setIsUploading(false)
+    router.push("/admin/products")
+    router.refresh()
   }
 
   const resizeImage = async (file: FileWithPath) => {
@@ -94,6 +86,7 @@ const ProductEditor = ({barcode}: ProductEditorProps) => {
   
   if(isLoading) return(<Loading message='商品情報取得中'/>)
   if(error || !product) return(<div>読み込み失敗</div>)
+  if(isUploading) return(<Loading message='アップロード中'/>)
   return (
     <div className='max-w-[600px] mx-auto mb-10'>
     {loading ? (
@@ -113,7 +106,7 @@ const ProductEditor = ({barcode}: ProductEditorProps) => {
           >
             <Card.Section>
               <Image
-                src={`https://firebasestorage.googleapis.com/v0/b/kajilab-store.appspot.com/o/images%2F${product.barcode}.jpg?alt=media&token=c46357bc-f29c-4d5f-8048-33c1d4a65083`}
+                src={`${process.env.NEXT_PUBLIC_BASE_URL}/images/products/${product.barcode}.jpg`}
                 w="auto"
                 fit="contain"
                 alt="Norway"
@@ -163,8 +156,7 @@ const ProductEditor = ({barcode}: ProductEditorProps) => {
                 // ファイル操作
                 if(files.length > 0){
                   setUploadFile(files[0])
-                  setIsUpload(true)
-                  uploadFileToFirebase(files[0])
+                  uploadFileToServer(files[0])
                   // resizeImage(files[0])
                 }
               }}
