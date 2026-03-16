@@ -70,7 +70,7 @@ const ProductEditor = ({barcode}: ProductEditorProps) => {
     await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/v1/images/products/${barcode}.jpg`, {
       method: "POST",
       headers: {
-        "X-API-Key": process.env.NEXT_PUBLIC_API_KEY!,
+        "X-API-Key": process.env.NEXT_PUBLIC_KAJILABSTORE_API_KEY || "",
       },
       body: formData,
     })
