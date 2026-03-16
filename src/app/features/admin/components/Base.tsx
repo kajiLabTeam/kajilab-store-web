@@ -2,7 +2,6 @@
 import { Badge, Button, Card, Group, Image, Pagination, Text } from '@mantine/core'
 import React, { useEffect, useState } from 'react'
 import * as Admin from "@/app/features/admin/components/Index"
-import { getPageProducts, getProducts } from '@/api'
 import { Asset, Product, Products } from '@/types/response'
 import Link from 'next/link'
 import Loading from '@/app/components/Loading'

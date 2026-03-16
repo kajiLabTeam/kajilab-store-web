@@ -1,5 +1,4 @@
 "use client"
-import { getAssetHistory } from '@/api';
 import { AdminPageTitle } from '@/app/components/AdminPageTitle';
 import Loading from '@/app/components/Loading';
 import { useGetAPI } from '@/app/hooks/useGetAPI';
