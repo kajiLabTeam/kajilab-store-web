@@ -15,10 +15,7 @@ export default function PaymentLogPanel({log, products}: PaymentLogPanelPropsTyp
             {log.content}
           </div>
           <div className="ml-auto">
-            {0-log.price}円
-            {log.current_debt != 0 && log.prev_debt != 0 && (
-              <>({log.current_debt}円)</>
-            )}
+            {0-log.price}円 ({log.current_debt}円)
           </div>
         </div>
         <div className="bg-gray-white">
